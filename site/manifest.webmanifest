@@ -1,0 +1,16 @@
+{
+  "name": "Louvre",
+  "short_name": "Louvre",
+  "description": "Identitas visual Louvre: simbol, lockup, panduan, dan penerapan.",
+  "lang": "id",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0D0D0D",
+  "theme_color": "#0D0D0D",
+  "icons": [
+    {"src": "assets/symbol/app-icon-dark-512.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any"},
+    {"src": "assets/symbol/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+    {"src": "assets/symbol/apple-touch-icon.png", "sizes": "180x180", "type": "image/png"}
+  ]
+}
