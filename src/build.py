@@ -158,7 +158,7 @@ a{color:inherit}.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 @supports (-moz-appearance:none){*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--text) 32%,transparent) transparent}}
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.4s;animation-timing-function:cubic-bezier(.4,0,.2,1)}
 html.tx *,html.tx *::before,html.tx *::after{transition:background-color .38s ease,color .38s ease,border-color .38s ease,fill .38s ease,stroke .38s ease!important}
-[data-en]{transition:opacity .17s ease}html.fade [data-en]{opacity:0}
+[data-en]{transition:opacity .17s ease}html.fade [data-en]:not(header *){opacity:0}
 .skip{position:absolute;left:-999px;top:8px;background:var(--text);color:var(--bg);padding:8px 14px;border-radius:999px;z-index:20}.skip:focus{left:12px}
 header{position:sticky;top:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:5}
 header .wrap{display:flex;align-items:center;gap:12px;height:60px}header img{height:24px;width:auto;display:block}header .logo-d{display:none}
@@ -250,9 +250,10 @@ function labels(){$$(".cap a[download],.mk figcaption a[download]").forEach(func
 $$("button.cp").forEach(function(b){b.textContent=L[lang].copySvg});$$("a.lb").forEach(function(a){a.setAttribute("aria-label",L[lang].open+": "+(a.querySelector("img").alt))})}
 function setLang(l,save){lang=l;r.lang=l;if(typeof exText==="function")setTimeout(exText,0);if(typeof dLabel==="function")setTimeout(dLabel,0);var u=(l==="en"?"/en/":"/")+location.hash;if(location.pathname!==(l==="en"?"/en/":"/"))try{history.replaceState(null,"",u)}catch(e){}document.title=l==="en"?"Louvre — Visual identity":"Louvre — Identitas"+" visual";translatable.forEach(function(el){el.innerHTML=l==="en"?el.dataset.en:el.dataset.id});
 $$(".tg.l button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.l===l)});labels();if(save){try{localStorage.setItem("lang",l)}catch(e){}}}
-/* smooth: cross-fade the whole page via View Transitions; fallbacks: colour transition (theme) / text fade (language); none under reduced motion */
+/* smooth: cross-fade the whole page via View Transitions; fallbacks: colour transition (theme) / text fade (language); none under reduced motion.
+   Touch screens skip View Transitions: on Android Chrome the root snapshot drops the sticky header for a moment when scrolled. */
 function smooth(kind,apply){if(matchMedia("(prefers-reduced-motion:reduce)").matches){apply();return}
-if(document.startViewTransition){document.startViewTransition(apply);return}
+if(document.startViewTransition&&!matchMedia("(pointer:coarse)").matches){document.startViewTransition(apply);return}
 if(kind==="theme"){r.classList.add("tx");apply();setTimeout(function(){r.classList.remove("tx")},420)}
 else{r.classList.add("fade");setTimeout(function(){apply();r.classList.remove("fade")},170)}}
 $$(".tg.l button").forEach(function(b){b.addEventListener("click",function(){if(b.dataset.l===lang)return;smooth("lang",function(){setLang(b.dataset.l,true)})})});
